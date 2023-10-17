@@ -1,19 +1,12 @@
-# ahnlab17_jinu
-# Chat GPT Class
+<div style="background-color: #a0c0e0; padding: 50px; text-align: center; border-radius: 10px;">
+
+# <span style="color: #D75A61;">Chat GPT Class</span>
 
 ---
-
-**Background Color**: Low-saturation blue
-
-**Text Color**: Indian pink
 
 **Design Concept**: Simple and clean
 
----
-
-## Description
-
-This is a class dedicated to the exploration and understanding of the Chat GPT model. We delve into its applications, capabilities, and nuances.
+Welcome to the **Chat GPT Class**! Here, we delve into the applications, capabilities, and nuances of the Chat GPT model.
 
 ---
 
@@ -31,5 +24,5 @@ This is a class dedicated to the exploration and understanding of the Chat GPT m
 
 For any further queries or information, please reach out to [email](mailto:email@example.com).
 
----
+</div>
 
