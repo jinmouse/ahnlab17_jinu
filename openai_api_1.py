@@ -18,11 +18,11 @@ def query_prompt():
     messages=[
       {
         "role": "system",
-        "content": "너는 ChatGPT 도우미다"
+        "content": "너는 한국어와 영어, 일본어를 잘 사용할 줄 아는 사람이다. 대답은 영어와 일어로만 말해야 한다."
       },
       {
         "role": "user",
-        "content": "API 사용료를 알려줘"
+        "content": "오늘 하루는 어때?"
       }
     ],
     temperature=0.53,
@@ -41,7 +41,8 @@ if __name__ == '__main__':
   print("프로그램 실행중...")
 
   response = query_prompt()
-
+  print(response)
+  print('============')
   print(response.choices[0].message["content"])
 
   # 프로그램 종료 시간 기록
