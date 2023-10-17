@@ -1,12 +1,12 @@
 <div style="background-color: #a0c0e0; padding: 50px; text-align: center; border-radius: 10px;">
 
-# <span style="color: #D75A61;">Chat GPT Class</span>
+# <span style="color: #D75A61;">Chat GPT Study</span>
 
 ---
 
 **Design Concept**: Simple and clean
 
-Welcome to the **Chat GPT Class**! Here, we delve into the applications, capabilities, and nuances of the Chat GPT model.
+Welcome to the **Chat GPT Study**! Here, we delve into the applications, capabilities, and nuances of the Chat GPT model.
 
 ---
 
