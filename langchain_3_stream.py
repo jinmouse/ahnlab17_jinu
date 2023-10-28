@@ -61,7 +61,6 @@ The US will transfer thousands of seized Iranian weapons and rounds of ammunitio
   response = chatchain.run(input_language="English", output_language="Korean", text=text, callbacks=[handler])
 
   print_end()
-
   print(response)
 
 

@@ -146,8 +146,17 @@ def test_markdown() -> None:
 
 
 if __name__ == '__main__':
-  test_text_split()
-  test_text_small_chunk()
+  # 문서 기본 나누기
+  # test_text_split()
+  
+  # 더 작은 단위로 나누기
+  # test_text_small_chunk()
+  
+  # pdf 문서 나누기
   test_pdf_split()
-  test_token_split()
-  test_markdown()
+  
+  # 토큰 단위로 나누기
+  # test_token_split()
+  
+  # markdown 형식 나누기
+  # test_markdown()

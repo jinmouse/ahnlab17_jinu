@@ -79,7 +79,7 @@ if __name__ == '__main__':
   # print('=' * 100)
   # test_youtube()  # ffmpeg 설치 필요.
   print('=' * 100)
-  test_url()
+  # test_url()
 
 
 

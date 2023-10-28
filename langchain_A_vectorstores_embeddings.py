@@ -23,7 +23,10 @@ sys.path.append(os.getenv("PYTHONPATH"))
 
 
 
-from utils import ( load_pdf_vectordb )
+from utils import (
+  load_pdf_vectordb,
+  load_vectordb_from_file
+  )
 
 
 # ## Embeddings
@@ -35,7 +38,7 @@ from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.schema.embeddings import Embeddings
 import numpy as np
 
-
+#  문장의 유사도를 체크함
 def test_embed(embedding : Embeddings) -> None:
   sentence1 = "i like dogs"
   sentence2 = "i like canines"
@@ -70,7 +73,7 @@ from langchain.vectorstores import Chroma
 from langchain.schema.vectorstore import VectorStore
 
 
-def test_vectordb() -> None:
+def test_pdf_vectordb() -> None:
   vectordb : VectorStore = load_pdf_vectordb("./data/프리랜서 가이드라인 (출판본).pdf")
 
   question = "정규직의 장점은?"
@@ -81,9 +84,27 @@ def test_vectordb() -> None:
   return None
 
 
+def test_csv_vectordb() -> None:
+  vectordb : VectorStore = load_vectordb_from_file("data/OutdoorClothingCatalog_1000.csv")
+
+  question = "A shirt that is wrinkle-resistant and breathable"
+  docs = vectordb.similarity_search(question,k=3) # 유사도가 높은 순으로 3개를 가져온다.
+
+  print(f"len(docs)=>{len(docs)}")
+  print(f"docs[0].page_content=>{docs[0].page_content}")
+
+  question = "주름이 잘 잡히지 않으면서 통기성이 좋은 셔츠"
+  docs = vectordb.similarity_search(question,k=3)
+
+  print(f"len(docs)=>{len(docs)}")
+  print(f"docs[0].page_content=>{docs[0].page_content}")
+  return None
+
+
 if __name__ == '__main__':
-  # test_embed_openai()
+  test_embed_openai()
   test_embed_hugging_face()
 
-  test_vectordb()
+  test_pdf_vectordb()
+  # test_csv_vectordb()
 
