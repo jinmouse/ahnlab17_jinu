@@ -160,11 +160,14 @@ def test_pdf():
   print("="*30)
   vectordb : FAISS = load_vectordb_from_file(PDF_FILE)
   print("Number of vectors in the index:", vectordb.index.ntotal)
-  q = "프리랜서들이 피해야 할 회사는 어떤 회사인가?"
+  # q = "프리랜서들이 피해야 할 회사는 어떤 회사인가?"
+  # q = "전체 목차를 출력해줘."
+  # q = "프리랜서의 미래는 몇 페이지에 있어?"
+  q = "4페이지에 있는 내용은 뭐야?"
 
   test_simple(vectordb, q)
-  test_prompt(vectordb, q)
-  test_map_reduce(vectordb, q)
+  # test_prompt(vectordb, q)
+  # test_map_reduce(vectordb, q)
 
 def test_csv():
   print("="*30)

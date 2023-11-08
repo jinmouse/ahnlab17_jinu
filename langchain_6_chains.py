@@ -55,7 +55,10 @@ def test_SimpleSequentialChain() -> None:
   first_prompt = ChatPromptTemplate.from_template(
     "'{product}'을 만드는 회사를 나타내는 최고로 좋은 이름 하나를 추천하라"
   )
-
+  # print("*"*100)
+  # chain = LLMChain(llm=llm, prompt=first_prompt)
+  # print(chain.run(product))
+  
   # Chain 1
   chain_one = LLMChain(llm=llm, prompt=first_prompt)
 
@@ -139,9 +142,9 @@ def test_SequentialChain(df: pd.DataFrame) -> None:
 
 
 if __name__ == '__main__':
-  df: pd.DataFrame = pd.read_csv('data/Data.csv')
+  df: pd.DataFrame = pd.read_csv('data/Data.csv', encoding='cp949')
   print(df.head())
 
-  test_LLMChain()
-  test_SimpleSequentialChain()
+  # test_LLMChain()
+  # test_SimpleSequentialChain()
   test_SequentialChain(df)

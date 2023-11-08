@@ -168,3 +168,11 @@ venv/
 data/
 vectordb/
 libs/
+docs/
+
+LangChain2*.py
+LangChain_L*.py
+study*.py
+L2*.py
+L4*.py
+0*.py

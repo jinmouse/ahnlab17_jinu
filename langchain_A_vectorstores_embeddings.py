@@ -76,11 +76,14 @@ from langchain.schema.vectorstore import VectorStore
 def test_pdf_vectordb() -> None:
   vectordb : VectorStore = load_pdf_vectordb("./data/프리랜서 가이드라인 (출판본).pdf")
 
-  question = "정규직의 장점은?"
-  docs = vectordb.similarity_search(question,k=3)
+  # question = "정규직의 장점은?"
+  question = "전체 목차를 출력해줘."
+  # question = "프리랜서의 미래는 몇 페이지에 있지?"
+  docs = vectordb.similarity_search(question,k=5)
 
-  print(f"len(docs)=>{len(docs)}")
-  print(f"docs[0].page_content=>{docs[0].page_content}")
+  # print(f"len(docs)=>{len(docs)}")
+  print(docs[4])
+  # print(f"docs[0].page_content=>{docs[0].page_content}")
   return None
 
 
@@ -102,8 +105,8 @@ def test_csv_vectordb() -> None:
 
 
 if __name__ == '__main__':
-  test_embed_openai()
-  test_embed_hugging_face()
+  # test_embed_openai()
+  # test_embed_hugging_face()
 
   test_pdf_vectordb()
   # test_csv_vectordb()
