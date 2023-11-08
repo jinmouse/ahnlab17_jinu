@@ -117,6 +117,8 @@ class PromptRequest(BaseModel):
 class PromptResult(BaseModel):
   result: str
 
+global vectordb
+global df
 
 # @app.get("/")
 # async def serve_html():
@@ -127,6 +129,11 @@ class PromptResult(BaseModel):
 async def new_token(db: int):
 
   # 원하는 db 처리 로직을 여기에 추가하실 수 있습니다.
+  if db == 1:
+    vectordb : FAISS = load_vectordb_from_file(PDF_FREELANCER_GUIDELINES_FILE)    
+  else:
+    df: pd.DataFrame = pd.read_csv(CSV_OUTDOOR_CLOTHING_CATALOG_FILE)
+  
   return jsonable_encoder(TokenOutput(token=str(uuid.uuid4()), db=str(db)))
 
 
@@ -152,7 +159,7 @@ async def process_prompt(request: PromptRequest):
   global promptResult
   questionPrompt = request.prompt
 
-  vectordb : FAISS = load_vectordb_from_file(PDF_FREELANCER_GUIDELINES_FILE if db == 1 else CSV_OUTDOOR_CLOTHING_CATALOG_FILE)
+  
   
   if db == 1: # PDF 관련
     inclusion_result = check_inclusion(questionPrompt, "요약")
@@ -176,9 +183,9 @@ async def process_prompt(request: PromptRequest):
       # busy_indicator.stop()
          
     else:
-      df: pd.DataFrame = pd.read_csv(CSV_OUTDOOR_CLOTHING_CATALOG_FILE)
+      
       print(df.head())
-      promptResult = getLLMChain(df)
+      promptResult = getLLMChain(df, questionPrompt)
   
 
  ######################## end
@@ -191,13 +198,13 @@ async def process_prompt(request: PromptRequest):
 
 # >>>>>>>> def start
 
-def getLLMChain(df: pd.DataFrame) -> None:
-  llm = ChatOpenAI(temperature=0.9, model=llm_model)
+def getLLMChain(df: pd.DataFrame, questionPrompt) -> None:
+  # llm = ChatOpenAI(temperature=0.9, model=llm_model)
 
  
   prompt = ChatPromptTemplate.from_template(
-    """{product}상품에 대한 전반적인 통계 정보를 안내하라. \
-      예) 총 상품수, 성별 의류수, 계절 별 의류수, 의류종류별 의류수 등
+    """{product} 상품에 대해서 아래 내용을 처리해 줘. \
+      예) {questionPrompt}
     """
   )
   product = df.head()
