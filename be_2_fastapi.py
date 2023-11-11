@@ -59,7 +59,6 @@ import asyncio
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
 from langchain.chains import ConversationChain
-from langchain.chains import RetrievalQA
 from langchain.chains import RetrievalQA,  ConversationalRetrievalChain
 from langchain.chains.summarize import load_summarize_chain
 from langchain.memory import ConversationBufferWindowMemory
@@ -72,8 +71,6 @@ from langchain.schema.vectorstore import (
   VectorStoreRetriever
 )
 from langchain.vectorstores import FAISS
-
-
 from langchain.indexes import VectorstoreIndexCreator
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings.openai import OpenAIEmbeddings
@@ -116,9 +113,11 @@ class PromptRequest(BaseModel):
 
 class PromptResult(BaseModel):
   result: str
+  token: str
 
 global vectordb
-global df
+# global df
+
 
 # @app.get("/")
 # async def serve_html():
@@ -129,11 +128,12 @@ global df
 async def new_token(db: int):
 
   # 원하는 db 처리 로직을 여기에 추가하실 수 있습니다.
-  if db == 1:
-    vectordb : FAISS = load_vectordb_from_file(PDF_FREELANCER_GUIDELINES_FILE)    
-  else:
-    df: pd.DataFrame = pd.read_csv(CSV_OUTDOOR_CLOTHING_CATALOG_FILE)
-  
+  # if db == 1:
+  # vectordb : FAISS = load_vectordb_from_file(PDF_FREELANCER_GUIDELINES_FILE)    
+  # else:
+  #   df : pd.DataFrame = pd.read_csv(CSV_OUTDOOR_CLOTHING_CATALOG_FILE)
+
+
   return jsonable_encoder(TokenOutput(token=str(uuid.uuid4()), db=str(db)))
 
 
@@ -143,6 +143,8 @@ request_idx = 0
 async def process_prompt(request: PromptRequest):
   # 비동기적으로 처리할 내용을 여기에 구현합니다.
   # 예를 들어, 외부 API 호출이나 무거운 계산 작업 등을 비동기로 수행할 수 있습니다.
+  
+  print("request >>>>>>>> ", request)
   global request_idx
   idx = request_idx
   request_idx = request_idx + 1
@@ -155,37 +157,35 @@ async def process_prompt(request: PromptRequest):
   await asyncio.sleep(5)  # 예시를 위한 비동기 작업 (1초 대기)
   
   ################## start
+  token = request.token
   db = request.db
   global promptResult
   questionPrompt = request.prompt
-
   
-  
-  if db == 1: # PDF 관련
-    inclusion_result = check_inclusion(questionPrompt, "요약")
-    if inclusion_result:
-      # 전체 글에 대한 요약본을 볼 수 있도록 하라.
-      chainType =  'map_reduce'
-      promptResult = getAnswerPDF(vectordb, questionPrompt, chainType)
-    else:
-      # chainType =  'stuff'
-      promptResult = test_pdf_splitter_embedding_vectorstore(questionPrompt)
+  if db == '1': # PDF 관련
+      if '요약' in questionPrompt:
+        vectordb : FAISS = load_vectordb_from_file(PDF_FREELANCER_GUIDELINES_FILE)
+        # 전체 글에 대한 요약본을 볼 수 있도록 하라.
+        chainType =  'map_reduce'
+        promptResult = getAnswerPDF(vectordb, questionPrompt, chainType)
+      else:
+        # chainType =  'stuff'
+        promptResult = test_pdf_splitter_embedding_vectorstore(questionPrompt)
       
   else:   # CSV 관련
+      inclusion_result = len(questionPrompt)
+      if inclusion_result == 0:
+        # busy_indicator = BusyIndicator().busy(True, "vectordb를 로딩중입니다 ")
+        tools = get_tools()
+        agent_executor = create_conversational_retrieval_agent(llm, tools, verbose=True)
+        result = agent_executor({"input": "상품 정보에 대하여 한국어로 번역해서 간략하게 안내를 해줘. 인사도 포함해서 친절하게 안내를 부탁해"})
+        promptResult = result["output"]
+        # busy_indicator.stop()
+          
+      else:
+        df : pd.DataFrame = pd.read_csv(CSV_OUTDOOR_CLOTHING_CATALOG_FILE)
     
-    inclusion_result = len(questionPrompt)
-    if inclusion_result == 0:
-      # busy_indicator = BusyIndicator().busy(True, "vectordb를 로딩중입니다 ")
-      tools = get_tools()
-      agent_executor = create_conversational_retrieval_agent(llm, tools, verbose=True)
-      result = agent_executor({"input": "상품 정보에 대하여 한국어로 번역해서 간략하게 안내를 해줘. 인사도 포함해서 친절하게 안내를 부탁해"})
-      promptResult = result["output"]
-      # busy_indicator.stop()
-         
-    else:
-      
-      print(df.head())
-      promptResult = getLLMChain(df, questionPrompt)
+        promptResult = getLLMChain(df, questionPrompt)
   
 
  ######################## end
@@ -193,7 +193,7 @@ async def process_prompt(request: PromptRequest):
   if is_debug:
     print(f"{idx}.{request.token} end.")
     
-  return jsonable_encoder(PromptResult(result=f"Processed: {promptResult}"))
+  return jsonable_encoder(PromptResult(result=f"Processed: {promptResult}", token=token))
 
 
 # >>>>>>>> def start
@@ -201,12 +201,14 @@ async def process_prompt(request: PromptRequest):
 def getLLMChain(df: pd.DataFrame, questionPrompt) -> None:
   # llm = ChatOpenAI(temperature=0.9, model=llm_model)
 
- 
   prompt = ChatPromptTemplate.from_template(
     """{product} 상품에 대해서 아래 내용을 처리해 줘. \
       예) {questionPrompt}
     """
   )
+  
+  # print('prompt =======> ', prompt)
+
   product = df.head()
   chain = LLMChain(llm=llm, prompt=prompt)
 
@@ -288,7 +290,7 @@ def test_pdf_splitter_embedding_vectorstore(questionPrompt):
   loader = PyPDFLoader(PDF_FREELANCER_GUIDELINES_FILE)
   
   # split documents
-  text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=150)
+  text_splitter = CharacterTextSplitter(chunk_size=250, chunk_overlap=50)
 
   index = VectorstoreIndexCreator(
         vectorstore_cls=FAISS,

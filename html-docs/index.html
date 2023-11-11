@@ -121,6 +121,10 @@ db 값은
         });
 
         const data = await response.json();
+        token = data.token
+        if (token != currentToken) {
+          return
+        }
 
         // Add server's response
         const serverMessageDiv = document.createElement("div");
