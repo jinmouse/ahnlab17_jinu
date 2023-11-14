@@ -89,7 +89,7 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 openai.organization = os.getenv("ORGANIZATION")
 
-llm_model = "gpt-3.5-turbo"
+llm_model = "gpt-3.5-turbo-1106"
 llm = ChatOpenAI(temperature=0.0, model=llm_model)
 
 PDF_FREELANCER_GUIDELINES_FILE = "./data/프리랜서 가이드라인 (출판본).pdf"
@@ -99,7 +99,7 @@ CSV_OUTDOOR_CLOTHING_CATALOG_FILE = "data/OutdoorClothingCatalog_1000.csv"
 is_debug = True
 app = FastAPI(debug=is_debug, docs_url="/api-docs")
 
-
+s
 class TokenOutput(BaseModel):
   token: str
   db : str

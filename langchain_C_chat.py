@@ -91,8 +91,8 @@ def get_qa(vectordb) -> ConversationalRetrievalChain:
   qa = ConversationalRetrievalChain.from_llm(
       llm,
       retriever=retriever,
-      return_source_documents=True,
-      return_generated_question=True,
+      return_source_documents=False,
+      return_generated_question=False,
       memory=memory
   )
   return qa

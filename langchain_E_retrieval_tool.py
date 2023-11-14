@@ -138,9 +138,9 @@ def get_tools() :
 
 def chat_qa(is_debug=False) -> None:
   console = ConsoleInput(basic_prompt='% ')
-  busy_indicator = BusyIndicator().busy(True, "vectordb를 로딩중입니다 ")
+  # busy_indicator = BusyIndicator().busy(True, "vectordb를 로딩중입니다 ")
   tools = get_tools()
-  busy_indicator.stop()
+  # busy_indicator.stop()
 
   agent_executor = create_conversational_retrieval_agent(llm, tools, verbose=True)
 
@@ -153,11 +153,11 @@ def chat_qa(is_debug=False) -> None:
     if t == 'q' or t == 'Q' or t == 'ㅂ':
       break
 
-    busy_indicator = BusyIndicator().busy(True)
+    # busy_indicator = BusyIndicator().busy(True)
     langchain.is_debug = is_debug
     result = agent_executor({"input": t})
     langchain.is_debug = False
-    busy_indicator.stop()
+    # busy_indicator.stop()
     console.out(result["output"])
     if is_debug:
       print_result(result)
