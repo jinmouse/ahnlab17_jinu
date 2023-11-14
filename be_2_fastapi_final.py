@@ -56,23 +56,15 @@ import asyncio
 
 # langchain 모듈
 from langchain.chat_models import ChatOpenAI
-from langchain.chains import LLMChain
-from langchain.chains import ConversationChain
-from langchain.chains import RetrievalQA,  ConversationalRetrievalChain
-from langchain.chains.summarize import load_summarize_chain
-from langchain.memory import ConversationBufferWindowMemory
+from langchain.chains import  ConversationalRetrievalChain
+
 from langchain.memory import ConversationBufferMemory
-from langchain.document_loaders import PyPDFLoader
-from langchain.prompts import ChatPromptTemplate
-from langchain.prompts import PromptTemplate
+
 from langchain.schema.vectorstore import (
-  VectorStore,
   VectorStoreRetriever
 )
 from langchain.vectorstores import FAISS
-from langchain.indexes import VectorstoreIndexCreator
-from langchain.text_splitter import CharacterTextSplitter
-from langchain.embeddings.openai import OpenAIEmbeddings
+
 from langchain.agents.agent_toolkits import create_retriever_tool
 from langchain.agents.agent_toolkits import create_conversational_retrieval_agent
 
