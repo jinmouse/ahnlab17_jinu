@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <!--
 
 위의 백엔드 서버에 기초해서 index.html을 만드는데
@@ -18,14 +17,14 @@ db 값은
 
 -->
 <html lang="ko">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Simple SPA</title>
-<style>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple SPA</title>
+    <style>
       .chat-messages {
         border: 1px solid black;
-        height: 600px;
+        height: 300px;
         overflow: auto;
         margin-bottom: 10px;
       }
@@ -47,24 +46,32 @@ db 값은
         width: 100%;
       }
     </style>
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/></head>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script><div class="col-md-8 offset-md-2"><div class="row"><div class="container py-5"><body>
-<div id="db-div">
-<label for="db">Choose a DB:</label>
-<select id="db">
-<option value="1">프리랜서로 사는 법</option>
-<option value="2">쇼핑몰 카탈로그</option>
-</select>
-<button class="btn btn-primary" onclick="getToken()">Submit</button>
-</div>
-<div id="chat-div">
-<div class="chat-messages p-3 border rounded mb-3" id="chat-messages"></div>
-<div id="prompt-div">
-<label for="prompt">Enter prompt:</label>
-<div class="form-row"><div class="form-group" style=" width: 100%;"><div class="d-flex align-items-center"><input class="form-control" id="prompt" onkeydown="if(event.keyCode==13) submitPrompt();" type="text"/><button class="btn btn-primary" onclick="submitPrompt()">Submit</button></div></div></div>
-</div>
-</div>
-<script>
+  </head>
+  <body>
+    <div id="db-div">
+      <label for="db">Choose a DB:</label>
+      <select id="db">
+        <option value="1">프리랜서로 사는 법</option>
+        <option value="2">쇼핑몰 카탈로그</option>
+      </select>
+      <button onclick="getToken()">Submit</button>
+    </div>
+
+    <div id="chat-div">
+      <div class="chat-messages" id="chat-messages"></div>
+
+      <div id="prompt-div">
+        <label for="prompt">Enter prompt:</label>
+        <input
+          type="text"
+          id="prompt"
+          onkeydown="if(event.keyCode==13) submitPrompt();"
+        />
+        <button onclick="submitPrompt()">Submit</button>
+      </div>
+    </div>
+
+    <script>
       let currentToken = null;
       let selectDB= null;
 
@@ -126,5 +133,5 @@ db 값은
         chatMessagesDiv.appendChild(serverMessageDiv);
       }
     </script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script></body></div></div></div>
+  </body>
 </html>
